@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GameTech - Peças para Computadores Gamers</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>GameTech</h1>
+        <p>Sua loja de peças para computadores gamers</p>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="#home">Início</a></li>
+            <li><a href="#produtos">Produtos</a></li>
+            <li><a href="#categorias">Categorias</a></li>
+            <li><a href="#contato">Contato</a></li>
+            <li><a href="#" id="carrinho-toggle" style="cursor: pointer;">Carrinho (<span id="carrinho-count">0</span>)</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <aside id="carrinho-sidebar">
+            <div class="carrinho-header">
+                <h2>Meu Carrinho</h2>
+                <button id="carrinho-fechar">&times;</button>
+            </div>
+            <div id="carrinho-items"></div>
+            <div class="carrinho-footer">
+                <div class="carrinho-total">
+                    <strong>Total:</strong> <span id="carrinho-total">R$ 0,00</span>
+                </div>
+                <button id="carrinho-finalizar" class="btn-finalizar">Finalizar Compra</button>
+            </div>
+        </aside>
+        <!-- Modal de Entrega -->
+        <div id="modal-entrega" class="modal-entrega">
+            <div class="modal-conteudo">
+                <div class="modal-header">
+                    <h2>Escolha a Forma de Entrega</h2>
+                    <button id="modal-fechar" class="modal-fechar">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="opcao-entrega">
+                        <label class="radio-label">
+                            <input type="radio" name="entrega" value="entrega" id="opt-entrega">
+                            <span class="radio-custom"></span>
+                            <div class="opcao-texto">
+                                <strong>🚚 Entrega em Casa</strong>
+                                <p>Receba o pedido no conforto da sua casa</p>
+                            </div>
+                        </label>
+                    </div>
+
+                    <div class="opcao-entrega">
+                        <label class="radio-label">
+                            <input type="radio" name="entrega" value="retirada" id="opt-retirada">
+                            <span class="radio-custom"></span>
+                            <div class="opcao-texto">
+                                <strong>🏪 Retirar na Loja</strong>
+                                <p>Retire seu pedido na nossa loja física</p>
+                            </div>
+                        </label>
+                    </div>
+
+                    <!-- Campo de endereço (aparece apenas com entrega) -->
+                    <div id="endereco-container" class="endereco-container" style="display: none;">
+                        <label for="endereco">Endereço de Entrega:</label>
+                        <input type="text" id="endereco" placeholder="Rua, número, complemento, bairro, cidade, CEP" required autocomplete="street-address">
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button id="btn-cancelar-modal" class="btn-cancelar">Cancelar</button>
+                    <button id="btn-continuar-whatsapp" class="btn-continuar">Continuar para WhatsApp</button>
+                </div>
+            </div>
+        </div>
+        <section id="inicio">
+            <h2>Bem-vindo à GameTech</h2>
+            <p>Encontre as melhores peças para gaming com preços competitivos e entrega rápida.</p>
+        </section>
+
+        <section id="categorias">
+            <h2>Categorias</h2>
+            <ul>
+                <li><a href="#placas-video">Placas de Vídeo</a></li>
+                <li><a href="#processadores">Processadores</a></li>
+                <li><a href="#memorias">Memória RAM</a></li>
+                <li><a href="#ssds">SSD e HD</a></li>
+                <li><a href="#fontes">Fontes</a></li>
+                <li><a href="#coolers">Coolers</a></li>
+                <li><a href="#motherboards">Placas-Mãe</a></li>
+                <li><a href="#perifericos">Periféricos</a></li>
+            </ul>
+        </section>
+
+        <section id="produtos">
+            <h2>Produtos em Destaque</h2>
+            <div id="produtos-list"></div>
+        </section>
+
+        <section id="promocoes">
+            <h2>Promoções Especiais</h2>
+            <p>Desconto de até 30% em produtos selecionados!</p>
+            <p>Confira nossas ofertas do mês.</p>
+        </section>
+
+        <section id="contato">
+            <h2>Contato</h2>
+            <p>Email: contato@gametech.com.br</p>
+            <p>Telefone: (11) 3000-0000</p>
+            <p>Endereço: Rua dos Gamers, 123 - São Paulo, SP</p>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 GameTech. Todos os direitos reservados.</p>
+        <ul>
+            <li><a href="#politica">Política de Privacidade</a></li>
+            <li><a href="#termos">Termos de Uso</a></li>
+            <li><a href="#faq">FAQ</a></li>
+            <li><a href="admin.html" target="_blank" style="color: #b19cd9; font-weight: 600;">⚙️ Painel Admin</a></li>
+        </ul>
+    </footer>
+    <script src="script.js"></script>
+</body>
+</html>

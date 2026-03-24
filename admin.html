@@ -1,0 +1,186 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GameTech - Painel Administrativo</title>
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+    <!-- TELA DE LOGIN -->
+    <div id="login-container">
+        <form onsubmit="fazerLogin(event)" style="width: 100%;">
+            <div class="login-logo">🎮</div>
+            <h2 class="login-titulo">GameTech</h2>
+            <p class="login-subtitulo">Painel Administrativo</p>
+
+            <div class="login-erro" id="loginErro"></div>
+
+            <div class="login-form">
+                <input 
+                    type="password" 
+                    class="login-input" 
+                    id="senhaInput" 
+                    placeholder="Digite a senha do admin" 
+                    autocomplete="off"
+                    required
+                >
+                <button type="submit" class="login-btn">
+                    🔐 Acessar Painel
+                </button>
+            </div>
+
+            <p style="color: #999; margin-top: 20px; font-size: 0.85rem;">
+                ⚠️ Painel restrito. Apenas administradores podem acessar.
+            </p>
+        </form>
+    </div>
+
+    <!-- PAINEL ADMINISTRATIVO -->
+    <div id="admin-container">
+        <div class="container">
+            <header>
+                <div class="header-content">
+                    <h1>🎮 GameTech - Painel Administrativo</h1>
+                    <p class="header-info">Gerenciar produtos e controlar estoque</p>
+                </div>
+                <button class="btn-logout" onclick="fazerLogout()">🚪 Sair (Logout)</button>
+            </header>
+
+            <div class="info-box">
+                💡 <strong>Dica:</strong> Edite as quantidades dos produtos, adicione novos itens e download o arquivo JSON atualizado para manter suas mudanças salvas.
+            </div>
+
+            <div class="controls">
+                <button onclick="abrirModalNovoProduto()" class="btn-success">➕ Novo Produto</button>
+                <button onclick="downloadJSON()" class="btn-warning">⬇️ Download JSON</button>
+                <div class="file-input-wrapper">
+                    <button onclick="this.nextElementSibling.click()" class="btn-warning">⬆️ Upload JSON</button>
+                    <input type="file" accept=".json" onchange="uploadJSON(event)">
+                </div>
+            </div>
+
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="🔍 Buscar produto..." onkeyup="filtrarProdutos()">
+            </div>
+
+            <div id="mensagensucesso" class="success-message"></div>
+
+            <div class="historico-wrapper">
+                <div class="historico-card" id="historicoVendasCard">
+                    <h2>Histórico de Vendas</h2>
+                    <ul id="historicoVendas" class="historico-list">
+                        <li>Nenhuma venda registrada</li>
+                    </ul>
+                    <button class="btn-danger btn-pequeno" style="margin-top: 10px;" onclick="limparHistoricoVendas()">🧹 Limpar histórico de vendas</button>
+                </div>
+                <div class="historico-card" id="historicoAlteracoesCard">
+                    <h2>Histórico de Alterações</h2>
+                    <ul id="historicoAlteracoes" class="historico-list">
+                        <li>Nenhuma alteração registrada</li>
+                    </ul>
+                    <button class="btn-danger btn-pequeno" style="margin-top: 10px;" onclick="limparHistoricoAlteracoes()">🧹 Limpar histórico de alterações</button>
+                </div>
+            </div>
+
+            <div class="tabela-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Produto</th>
+                            <th>Preço</th>
+                            <th>Quantidade</th>
+                            <th>Status</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="produtosTabela">
+                        <tr>
+                            <td colspan="5" style="text-align: center; color: #999;">Carregando produtos...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para novo/editar produto -->
+    <div id="modalProduto" class="modal-overlay">
+        <div class="modal">
+            <h2 id="modalTitulo">Novo Produto</h2>
+            <form id="formProduto" onsubmit="salvarProduto(event)">
+                <div class="form-group">
+                    <label for="produtoNome">Nome do Produto *</label>
+                    <input type="text" id="produtoNome" required>
+                </div>
+                <div class="form-group">
+                    <label for="produtoDescricao">Descrição</label>
+                    <input type="text" id="produtoDescricao">
+                </div>
+                <div class="form-group">
+                    <label for="produtoPreco">Preço (R$) *</label>
+                    <input type="number" id="produtoPreco" step="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label for="produtoQuantidade">Quantidade *</label>
+                    <input type="number" id="produtoQuantidade" min="0" required>
+                </div>
+                <div class="form-group">
+                    <label for="produtoCategoria">Categoria</label>
+                    <input type="text" id="produtoCategoria" value="Produtos">
+                </div>
+                <div class="form-group">
+                    <label>Imagens do Produto</label>
+                    <div id="produtoImagensContainer">
+                        <!-- Imagens serão adicionadas dinamicamente pelo JavaScript -->
+                    </div>
+                    <button type="button" onclick="adicionarImagem()" class="btn-adicionar-imagem">➕ Adicionar Imagem</button>
+                </div>
+                <div class="form-group">
+                    <label>Upload de Imagens</label>
+                    <div id="imagemDropZone" class="drop-zone" onclick="document.getElementById('produtoImagemUpload').click()">
+                        Arraste imagens aqui ou clique para selecionar
+                    </div>
+                    <input type="file" id="produtoImagemUpload" accept="image/*" multiple style="display:none" onchange="processarUploadImagemMultiplo(event)">
+                </div>
+                <div class="modal-buttons">
+                    <button type="submit">Salvar</button>
+                    <button type="button" onclick="fecharModal()" class="btn-danger">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal para promoção -->
+    <div id="modalPromocao" class="modal-overlay">
+        <div class="modal">
+            <h2>Definir Promoção</h2>
+            <form id="formPromocao" onsubmit="salvarPromocao(event)">
+                <div class="form-group">
+                    <label for="produtoPromocaoNome">Produto</label>
+                    <input type="text" id="produtoPromocaoNome" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="produtoDesconto">Desconto (%) *</label>
+                    <input type="number" id="produtoDesconto" min="0" max="100" step="1" placeholder="Ex: 20" required>
+                </div>
+                <div class="form-group">
+                    <label for="produtoPrecoOriginal">Preço Original</label>
+                    <input type="text" id="produtoPrecoOriginal" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="produtoPrecoComDesconto">Preço com Desconto</label>
+                    <input type="text" id="produtoPrecoComDesconto" readonly>
+                </div>
+                <div class="modal-buttons">
+                    <button type="submit">Aplicar Promoção</button>
+                    <button type="button" onclick="removerPromocao()" class="btn-danger">Remover Promoção</button>
+                    <button type="button" onclick="fecharModalPromocao()" class="btn-danger">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="admin.js"></script>
+</body>
+</html>
