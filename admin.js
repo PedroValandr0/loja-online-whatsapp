@@ -92,37 +92,30 @@ function processarArquivoImagem(file) {
 
     const reader = new FileReader();
     reader.onload = (e) => {
-        uploadedImageDataURL = e.target.result;
-        setPreviewImagem(uploadedImageDataURL);
-        document.getElementById('produtoImagem').value = '';
+        uploadedImagesDataURLs.push(e.target.result);
+
+        // Adiciona campo automaticamente para imagem upload
+        const container = document.getElementById('produtoImagensContainer');
+        if (container) {
+            const itens = container.querySelectorAll('.imagem-item');
+            const novoIndex = itens.length;
+            const novoItem = document.createElement('div');
+            novoItem.className = 'imagem-item';
+            novoItem.setAttribute('data-index', novoIndex);
+            novoItem.innerHTML = `
+                <input type="text" class="produto-imagem-url" value="${e.target.result}" placeholder="URL da imagem ${novoIndex + 1}" oninput="atualizarPreviewPorURLMultiplo(${novoIndex})">
+                <button type="button" onclick="removerImagem(${novoIndex})" class="btn-remover-imagem">❌</button>
+                <img class="preview-imagem-multiplo" src="${e.target.result}" alt="Preview ${novoIndex + 1}" style="display: block">
+            `;
+            container.appendChild(novoItem);
+        }
     };
     reader.readAsDataURL(file);
 }
 
-function atualizarPreviewPorURL() {
-    const url = document.getElementById('produtoImagem').value.trim();
-    if (!url) {
-        uploadedImageDataURL = null;
-        setPreviewImagem('');
-        return;
-    }
-
-    uploadedImageDataURL = null;
-    setPreviewImagem(url);
-}
-
-function setPreviewImagem(src) {
-    const preview = document.getElementById('previewImagem');
-    if (!preview) return;
-
-    if (src) {
-        preview.src = src;
-        preview.style.display = 'block';
-    } else {
-        preview.src = '';
-        preview.style.display = 'none';
-    }
-}
+// Funções legacy mantidas para compatibilidade
+function atualizarPreviewPorURL() { return; }
+function setPreviewImagem() { /* compatibilidade — usa múltiplas imagens */ }
 
 // ========== FUNCIONALIDADES DO ADMIN ==========
 function inicializar() {
@@ -322,6 +315,36 @@ function venderProduto(index) {
     salvarProdutos();
     renderizarTabela();
     mostrarMensagem('✓ Venda registrada e estoque atualizado');
+}
+
+// ========== ORDENAÇÃO DE PRODUTOS ==========
+let ordenacaoAtual = null;
+
+function ordenarPor(criterio) {
+    // Toggle direção se já está ordenando pelo mesmo critério
+    if (ordenacaoAtual === criterio) {
+        produtos.reverse();
+    } else {
+        ordenacaoAtual = criterio;
+
+        if (criterio === 'nome') {
+            produtos.sort((a, b) => a.nome.localeCompare(b.nome, 'pt-BR'));
+        } else if (criterio === 'preco') {
+            produtos.sort((a, b) => a.preco - b.preco);
+        } else if (criterio === 'quantidade') {
+            produtos.sort((a, b) => b.quantidade - a.quantidade);
+        }
+    }
+
+    renderizarTabela();
+    destacarBotaoOrdenacao(criterio);
+}
+
+function destacarBotaoOrdenacao(criterio) {
+    document.querySelectorAll('.btn-ordenacao').forEach(btn => btn.classList.remove('ativo'));
+    const mapa = { nome: 'btnOrdenarNome', preco: 'btnOrdenarPreco', quantidade: 'btnOrdenarQuantidade' };
+    const btn = document.getElementById(mapa[criterio]);
+    if (btn) btn.classList.add('ativo');
 }
 
 function filtrarProdutos() {
@@ -598,15 +621,36 @@ function atualizarPreviewPorURLMultiplo(index) {
 }
 
 function processarUploadImagemMultiplo(event) {
-    const file = event.target.files[0];
-    if (file) {
-        processarArquivoImagemMultiplo(file);
-    }
+    const files = event.target.files;
+    // Processar todas as imagens selecionadas
+    Array.from(files).forEach(file => processarArquivoImagemMultiplas(file));
+    event.target.value = ''; // Reset input
 }
 
-function processarArquivoImagemMultiplo(file) {
+function configurarDragDropMultiplo() {
+    const dropZone = document.getElementById('imagemDropZone');
+    if (!dropZone) return;
+
+    dropZone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        dropZone.classList.add('dragover');
+    });
+
+    dropZone.addEventListener('dragleave', () => {
+        dropZone.classList.remove('dragover');
+    });
+
+    dropZone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dropZone.classList.remove('dragover');
+        Array.from(e.dataTransfer.files).filter(f => f.type.startsWith('image/'))
+            .forEach(file => processarArquivoImagemMultiplas(file));
+    });
+}
+
+function processarArquivoImagemMultiplas(file) {
     if (!file.type.startsWith('image/')) {
-        alert('⚠️ Por favor, selecione um arquivo de imagem válido.');
+        alert('⚠️ Por favor, selecione arquivos de imagem válidos.');
         return;
     }
 
@@ -614,50 +658,21 @@ function processarArquivoImagemMultiplo(file) {
     reader.onload = (e) => {
         const dataURL = e.target.result;
         uploadedImagesDataURLs.push(dataURL);
-        
-        // Encontrar o último campo de imagem e colocar o preview lá
+
         const container = document.getElementById('produtoImagensContainer');
         const itens = container.querySelectorAll('.imagem-item');
-        
-        if (itens.length > 0) {
-            // Usar o último campo disponível
-            const ultimoItem = itens[itens.length - 1];
-            const input = ultimoItem.querySelector('.produto-imagem-url');
-            const preview = ultimoItem.querySelector('.preview-imagem-multiplo');
-            
-            // Se o último campo já tem uma imagem, adicionar um novo campo
-            if (input.value.trim()) {
-                adicionarImagem();
-                // Aguardar um pouco e então atualizar o novo campo
-                setTimeout(() => {
-                    const novosItens = container.querySelectorAll('.imagem-item');
-                    const novoUltimoItem = novosItens[novosItens.length - 1];
-                    const novoInput = novoUltimoItem.querySelector('.produto-imagem-url');
-                    const novoPreview = novoUltimoItem.querySelector('.preview-imagem-multiplo');
-                    novoInput.value = dataURL;
-                    novoPreview.src = dataURL;
-                    novoPreview.style.display = 'block';
-                }, 10);
-            } else {
-                // O último campo está vazio, usar ele
-                input.value = dataURL;
-                preview.src = dataURL;
-                preview.style.display = 'block';
-            }
-        } else {
-            // Não há campos, adicionar um novo
-            adicionarImagem();
-            setTimeout(() => {
-                const novosItens = container.querySelectorAll('.imagem-item');
-                const novoItem = novosItens[0];
-                const novoInput = novoItem.querySelector('.produto-imagem-url');
-                const novoPreview = novoItem.querySelector('.preview-imagem-multiplo');
-                novoInput.value = dataURL;
-                novoPreview.src = dataURL;
-                novoPreview.style.display = 'block';
-            }, 10);
-        }
-        
+        const novoIndex = itens.length;
+
+        const novoItem = document.createElement('div');
+        novoItem.className = 'imagem-item';
+        novoItem.setAttribute('data-index', novoIndex);
+        novoItem.innerHTML = `
+            <input type="text" class="produto-imagem-url" value="${dataURL}" placeholder="URL da imagem ${novoIndex + 1}" oninput="atualizarPreviewPorURLMultiplo(${novoIndex})">
+            <button type="button" onclick="removerImagem(${novoIndex})" class="btn-remover-imagem">❌</button>
+            <img class="preview-imagem-multiplo" src="${dataURL}" alt="Preview ${novoIndex + 1}" style="display: block">
+        `;
+
+        container.appendChild(novoItem);
         mostrarMensagem('✓ Imagem adicionada com sucesso!');
     };
     reader.readAsDataURL(file);
@@ -764,5 +779,6 @@ document.getElementById('modalProduto').addEventListener('click', (e) => {
 });
 
 // Configurar upload de imagem por drag/drop e inicializar login
+configurarDragDropMultiplo();
 configurarUploadImagem();
 verificarAutenticacao();
