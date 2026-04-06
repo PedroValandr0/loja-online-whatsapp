@@ -115,11 +115,11 @@ body {
 }
 
 header {
-    background: linear-gradient(90deg, #fde4f0 0%, #ffe4f0 50%, #f9e4ff 100%);
+    background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
     padding: 25px;
     border-radius: 10px;
     margin-bottom: 30px;
-    box-shadow: 0 4px 15px rgba(177, 156, 217, 0.2);
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
     text-align: center;
     display: flex;
     justify-content: space-between;
@@ -131,12 +131,12 @@ header {
 }
 
 h1 {
-    color: #555;
+    color: #fff;
     margin-bottom: 5px;
 }
 
 .header-info {
-    color: #888;
+    color: #d4c4f7;
     font-size: 0.9rem;
 }
 
@@ -401,7 +401,27 @@ input[type="email"]:focus {
 }
 
 .info-box strong {
-    color: #b19cd9;
+    color: #667eea;
+}
+
+.btn-ordenacao {
+    background: linear-gradient(135deg, #e8e4f5 0%, #d4d0e8 100%);
+    color: #555;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.btn-ordenacao:hover {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: #fff;
+}
+
+.btn-ordenacao.ativo {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: #fff;
+    box-shadow: 0 3px 12px rgba(102, 126, 234, 0.4);
 }
 
 .historico-wrapper {
@@ -531,106 +551,159 @@ input[type="email"]:focus {
 }
 
 @media (max-width: 768px) {
+    body {
+        padding: 10px;
+    }
+
+    .container {
+        padding: 0;
+    }
+
     table {
-        font-size: 0.9rem;
+        font-size: 0.85rem;
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    .tabela-container {
+        border-radius: 10px 10px 0 0;
     }
 
     th, td {
-        padding: 8px;
+        padding: 10px 12px;
     }
 
     .modal {
         width: 95%;
         padding: 20px;
+        margin: 10px;
     }
 
     .controls {
         flex-direction: column;
+        gap: 8px;
+    }
+
+    .controls button, .btn-ordenacao {
+        width: 100%;
+        text-align: center;
     }
 
     button {
         width: 100%;
     }
 
+    .search-box {
+        margin: 0 10px 20px;
+    }
+
     header {
         flex-direction: column;
         gap: 15px;
         text-align: center;
+        margin: 0 0 20px;
+        border-radius: 0;
     }
 
     .btn-logout {
         width: 100%;
     }
-    
+
+    .historico-wrapper {
+        grid-template-columns: 1fr;
+    }
+
+    .info-box {
+        margin: 0 10px 20px;
+    }
+
     /* Estilos para múltiplas imagens no mobile */
     .imagem-item {
         flex-direction: column;
         align-items: stretch;
         gap: 8px;
     }
-    
+
     .produto-imagem-url {
         width: 100%;
     }
-    
+
     .btn-remover-imagem {
         align-self: flex-end;
         width: auto;
     }
-    
+
     .preview-imagem-multiplo {
         width: 100%;
         height: 80px;
         align-self: center;
     }
-    
+
     .btn-adicionar-imagem {
         width: 100%;
         margin-top: 15px;
+    }
+
+    .acoes {
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .acoes .btn-pequeno {
+        width: 100%;
     }
 }
 
 /* Smartphone pequeno */
 @media (max-width: 480px) {
     body {
-        padding: 10px;
+        padding: 6px;
     }
-    
-    #admin-container {
-        padding: 15px;
+
+    .container {
+        padding: 0;
     }
-    
+
     table {
-        font-size: 0.8rem;
+        font-size: 0.75rem;
     }
-    
+
     th, td {
-        padding: 6px 4px;
+        padding: 8px 10px;
     }
-    
+
     .modal {
         width: 98%;
         padding: 15px;
-        margin: 10px;
+        margin: 5px;
     }
-    
+
     .form-group {
-        margin-bottom: 15px;
+        margin-bottom: 12px;
     }
-    
+
     .modal-buttons {
         flex-direction: column;
-        gap: 10px;
+        gap: 8px;
     }
-    
+
     .modal-buttons button {
         width: 100%;
         padding: 12px;
     }
-    
-    /* Ajustes para touch */
+
+    /* Touch-friendly */
     button, .btn-pequeno, .btn-adicionar-imagem, .btn-remover-imagem {
-        min-height: 44px; /* Tamanho mínimo para touch */
-        font-size: 16px; /* Evita zoom no iOS */
+        min-height: 44px;
+        font-size: 15px;
+    }
+
+    header h1 {
+        font-size: 1.3rem;
+    }
+
+    .header-info {
+        font-size: 0.85rem;
     }
 }
