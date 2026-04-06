@@ -60,6 +60,13 @@
                 </div>
             </div>
 
+            <div class="controls">
+                <span style="color: #888; font-size: 0.9rem; line-height: 2.5rem;">Ordenar:</span>
+                <button onclick="ordenarPor('nome')" class="btn-ordenacao" id="btnOrdenarNome">🔤 Nome</button>
+                <button onclick="ordenarPor('preco')" class="btn-ordenacao" id="btnOrdenarPreco">💲 Preço</button>
+                <button onclick="ordenarPor('quantidade')" class="btn-ordenacao" id="btnOrdenarQuantidade">📦 Estoque</button>
+            </div>
+
             <div class="search-box">
                 <input type="text" id="searchInput" placeholder="🔍 Buscar produto..." onkeyup="filtrarProdutos()">
             </div>
