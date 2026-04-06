@@ -468,32 +468,31 @@ btnContinuarWhatsapp.addEventListener('click', function() {
 // ========================================
 function enviarParaWhatsApp(tipoEntrega, endereco) {
     if (carrinho.length > 0) {
-        const numeroWhatsApp = '';// INSIRA O NÚMERO DE WHATSAPP AQUI (formato: 5511999999999)
+        const numeroWhatsApp = '5511918558211';// INSIRA O NÚMERO DE WHATSAPP AQUI (formato: 5511999999999)
         const total = carrinho.reduce((sum, item) => sum + (item.preco * item.quantidade), 0);
         
-        let mensagem = '🛒 *NOVO PEDIDO GAMETECH*\n\n';
-        mensagem += '*Itens do Pedido:*\n';
-        
+        let mensagem = '🎮 *NOVO PEDIDO | GAMETECH*\n';
+        mensagem += '━━━━━━━━━━━━━━━━━━━━\n\n';
+
         carrinho.forEach((item, index) => {
-            mensagem += `${index + 1}. ${item.nome}\n`;
-            mensagem += `   Quantidade: ${item.quantidade}x\n`;
-            mensagem += `   Preço unitário: R$ ${item.preco.toFixed(2).replace('.', ',')}\n`;
-            mensagem += `   Subtotal: R$ ${(item.preco * item.quantidade).toFixed(2).replace('.', ',')}\n\n`;
+            mensagem += `*${index + 1}. ${item.nome}*\n`;
+            mensagem += `   Qtd: ${item.quantidade}x\n`;
+            mensagem += `   Valor un.: R$ ${item.preco.toFixed(2).replace('.', ',')}\n`;
+            mensagem += `   Subtotal: *R$ ${(item.preco * item.quantidade).toFixed(2).replace('.', ',')}*\n\n`;
         });
-        
-        mensagem += `*━━━━━━━━━━━━━━━━━━━━━━━━*\n`;
-        mensagem += `💰 *TOTAL: R$ ${total.toFixed(2).replace('.', ',')}\n`;
-        mensagem += `*━━━━━━━━━━━━━━━━━━━━━━━━*\n\n`;
-        
+
+        mensagem += '━━━━━━━━━━━━━━━━━━━━\n';
+        mensagem += `💰 *TOTAL: R$ ${total.toFixed(2).replace('.', ',')}*\n`;
+        mensagem += '━━━━━━━━━━━━━━━━━━━━\n\n';
+
         if (tipoEntrega === 'entrega') {
-            mensagem += `📍 *ENTREGA EM CASA*\n`;
-            mensagem += `Endereço: ${endereco}\n\n`;
+            mensagem += `📍 *ENTREGA*\n${endereco}\n\n`;
         } else {
             mensagem += `🏪 *RETIRADA NA LOJA*\n`;
-            mensagem += `Endereço da loja: Rua dos Gamers, 123 - São Paulo, SP\n\n`;
+            mensagem += `Rua dos Gamers, 123 - São Paulo, SP\n\n`;
         }
-        
-        mensagem += `Olá! Gostaria de comprar esses itens da GameTech. 🎮`;
+
+        mensagem += `Aguardo confirmação do pedido! 😊`;
         
         const mensagemCodificada = encodeURIComponent(mensagem);
         const linkWhatsApp = `https://wa.me/${numeroWhatsApp}?text=${mensagemCodificada}`;
