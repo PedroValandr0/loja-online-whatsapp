@@ -6,7 +6,7 @@ Seu site GameTech agora possui um **sistema completo de banco de dados com contr
 
 ---
 
-## � **SEGURANÇA - Acessar o Painel Administrativo**
+## 🔐 **SEGURANÇA - Acessar o Painel Administrativo**
 
 ### **Tela de Login**
 Quando você acessa o painel administrativo, aparece uma tela de login solicitando uma **senha**. Isso protege seus dados!
@@ -92,7 +92,7 @@ const SENHA_ADMIN = "minha_senha_super_secreta_2024";
 - ⚠️ Se você limpar o histórico/cache do navegador, os dados podem ser perdidos
 
 ### **Fazer Download do Banco de Dados**
-1. Clique em **"⬇️ Download JSON"** 
+1. Clique em **"⬇️ Download JSON"**
 2. Um arquivo `produtos-gametech-YYYY-MM-DD.json` será baixado
 3. **Guarde este arquivo em um local seguro** como backup
 
@@ -159,6 +159,7 @@ Cliente pode: Comprar (mas a cor fica diferente, aviso visual)
 | ✏️ Editar | Modifica um produto existente |
 | 🗑️ Deletar | Remove um produto (com confirmação) |
 | 🚪 Logout | Faz logout do painel |
+| 🏷️ Promoção | Aplica desconto em produtos |
 
 ---
 
@@ -211,6 +212,7 @@ Cada produto tem:
   "descricao": "Descrição do produto...",
   "preco": 4999.00,
   "imagem": "https://...",
+  "imagens": ["https://...", "https://..."],
   "categoria": "Placas de Vídeo",
   "quantidade": 5
 }
@@ -240,8 +242,7 @@ Cada produto tem:
 
 ## 🚀 **Próximas Melhorias (Opcional)**
 
-Possibilidades futura que você pode pedir:
-- ✨ Histórico de vendas
+Possibilidades futuras que você pode pedir:
 - 📊 Relatórios de estoque
 - 🔔 Notificações de baixo estoque
 - 💾 Backup automático na nuvem
@@ -254,4 +255,3 @@ Possibilidades futura que você pode pedir:
 Se tiver dúvidas sobre como usar o sistema, entre em contato!
 
 **Seu site GameTech está pronto e protegido! 🎮🔐**
-
